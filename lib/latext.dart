@@ -48,13 +48,11 @@ class LaTexTState extends State<LaTexT> {
 
     // Building [RegExp] to find any Math part of the LaTeX code by looking for the specified delimiters
     final String delimiter = widget.delimiter.replaceAll(r'$', r'\$');
-    final String displayDelimiter =
-        widget.displayDelimiter.replaceAll(r'$', r'\$');
+    final String displayDelimiter = widget.displayDelimiter.replaceAll(r'$', r'\$');
 
     final String rawRegExp =
         '(($delimiter)([^$delimiter]*[^\\\\\\$delimiter])($delimiter)|($displayDelimiter)([^$displayDelimiter]*[^\\\\\\$displayDelimiter])($displayDelimiter))';
-    List<RegExpMatch> matches =
-        RegExp(rawRegExp, dotAll: true).allMatches(laTeXCode).toList();
+    List<RegExpMatch> matches = RegExp(rawRegExp, dotAll: true).allMatches(laTeXCode).toList();
 
     // If no single Math part found, returning the raw [Text] from widget.laTeXCode
     if (matches.isEmpty) return widget.laTeXCode;
@@ -91,12 +89,14 @@ class LaTexTState extends State<LaTexT> {
       }
       // Adding the [CaTeX] widget to the children
       if (laTeXMatch.group(3) != null) {
-        textBlocks.addAll(
-          _extractWidgetSpans(
+        textBlocks.addAll([
+          const TextSpan(text: ' '),
+          ..._extractWidgetSpans(
             laTeXMatch.group(3)?.trim() ?? '',
             false,
           ),
-        );
+          const TextSpan(text: ' '),
+        ]);
       } else {
         textBlocks.addAll([
           const TextSpan(text: '\n'),
@@ -121,9 +121,8 @@ class LaTexTState extends State<LaTexT> {
     return Text.rich(
       TextSpan(
         children: textBlocks,
-        style: (defaultTextStyle == null)
-            ? Theme.of(context).textTheme.bodyLarge
-            : defaultTextStyle,
+        style:
+            (defaultTextStyle == null) ? Theme.of(context).textTheme.bodyLarge : defaultTextStyle,
       ),
       textAlign: widget.laTeXCode.textAlign,
       textDirection: widget.laTeXCode.textDirection,
@@ -189,28 +188,26 @@ class LaTexTState extends State<LaTexT> {
           );
         }
 
-        Widget tex = SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Math.tex(
-            subTexts[j].trim(),
-            textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-            onErrorFallback: (exception) =>
-                widget.onErrorFallback?.call(subTexts[j].trim()) ??
-                Math.defaultOnErrorFallback(exception),
-          ),
+        Widget mathTex = Math.tex(
+          subTexts[j].trim(),
+          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+          onErrorFallback: (exception) =>
+              widget.onErrorFallback?.call(subTexts[j].trim()) ??
+              Math.defaultOnErrorFallback(exception),
         );
 
         if (align) {
-          tex = Align(
+          mathTex = Align(
             alignment: Alignment.center,
-            child: tex,
+            child: mathTex,
           );
         }
 
         widgetSpans.add(
           WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: tex,
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: mathTex,
           ),
         );
       }

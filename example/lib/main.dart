@@ -64,16 +64,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   maxLines: null,
                   decoration: const InputDecoration(
                       labelText: 'Your LaTeX code here',
-                      helperText:
-                          'Use \$ as delimiter. Use \$\$ for display LaTeX.'),
+                      helperText: 'Use \$ as delimiter. Use \$\$ for display LaTeX.'),
                   controller: _laTeXInputController,
                 ),
               ),
               Builder(
                 builder: (context) => LaTexT(
+                  delimiter: r'$$',
+                  breakDelimiter: r'$',
                   laTeXCode: Text(
                     _laTeX,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                    ),
                   ),
                 ),
               )
