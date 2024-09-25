@@ -30,8 +30,8 @@ class LaTexT extends StatefulWidget {
     required this.laTeXCode,
     this.equationStyle,
     this.onErrorFallback,
-    this.delimiter = r'$',
-    this.displayDelimiter = r'$$',
+    this.delimiter = r'$$',
+    this.displayDelimiter = r'$',
     this.breakDelimiter = r'\n',
   });
 
