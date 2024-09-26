@@ -29,15 +29,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text: r'What do you think about $L'
-        '\''
-        r' = {L}{\sqrt{1-\frac{v^2}{c^2}}}$ ?'
-        r'\n'
-        r'And some display $\LaTeX$: $$\boxed{\rm{A function: } f(x) = \frac{5}{3} \cdot x}$$'
-        r'\n'
-        r'$\KaTeX$-Flutter provides easy processing of $LaTeX$ embedded into any text.'
-        r'\n'
-        r'$$\left\{\begin{array}{l}3 x-4 y=1 \\ -3 x+7 y=5\end{array}\right.$$',
+    text:
+        r'$$a_{1}+ a_{5}+a_{9}+ a_{2}+ a_{6}+ a_{9}+a_{3}+ a_{7}+a_{9}+a_{4}+ a_{8}+ a_{9}\n =... + 3 \times a_{9}.$$ ',
   );
   late String _laTeX;
 
@@ -70,8 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Builder(
                 builder: (context) => LaTexT(
-                  delimiter: r'$$',
-                  breakDelimiter: r'$',
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(

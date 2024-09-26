@@ -188,12 +188,16 @@ class LaTexTState extends State<LaTexT> {
           );
         }
 
-        Widget mathTex = Math.tex(
-          subTexts[j].trim(),
-          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-          onErrorFallback: (exception) =>
-              widget.onErrorFallback?.call(subTexts[j].trim()) ??
-              Math.defaultOnErrorFallback(exception),
+        Widget mathTex = SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.zero,
+          child: Math.tex(
+            subTexts[j].trim(),
+            textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+            onErrorFallback: (exception) =>
+                widget.onErrorFallback?.call(subTexts[j].trim()) ??
+                Math.defaultOnErrorFallback(exception),
+          ),
         );
 
         if (align) {
