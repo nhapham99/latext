@@ -90,12 +90,10 @@ class LaTexTState extends State<LaTexT> {
       // Adding the [CaTeX] widget to the children
       if (laTeXMatch.group(3) != null) {
         textBlocks.addAll([
-          const TextSpan(text: ' '),
           ..._extractWidgetSpans(
             laTeXMatch.group(3)?.trim() ?? '',
             false,
           ),
-          const TextSpan(text: ' '),
         ]);
       } else {
         textBlocks.addAll([
