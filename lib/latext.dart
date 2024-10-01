@@ -57,13 +57,13 @@ class LaTexTState extends State<LaTexT> {
     // If no single Math part found, returning the raw [Text] from widget.laTeXCode
     if (matches.isEmpty) return widget.laTeXCode;
 
-    // Otherwise looping through all matches and building a [RichText] from [TextSpan] and [WidgetSpan] widgets
+    // Otherwise looping threw all matches and building a [RichText] from [TextSpan] and [WidgetSpan] widgets
     final List<InlineSpan> textBlocks = [];
     int lastTextEnd = 0;
 
     String? prevText1;
     for (final laTeXMatch in matches) {
-      // If there is an offset between the last match (beginning of the [String] in first case), first adding the found [Text]
+      // If there is an offset between the lat match (beginning of the [String] in first case), first adding the found [Text]
       if (laTeXMatch.start > lastTextEnd) {
         final texts = laTeXCode.substring(lastTextEnd, laTeXMatch.start);
         if (prevText1 != null && prevText1.endsWith(' ')) {
@@ -115,22 +115,21 @@ class LaTexTState extends State<LaTexT> {
       ]);
     }
 
-    // Wrapping the RichText in a SingleChildScrollView for scrollable content
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Text.rich(
-        TextSpan(
-          children: textBlocks,
-          style: defaultTextStyle ?? Theme.of(context).textTheme.bodyLarge,
-        ),
-        textAlign: widget.laTeXCode.textAlign,
-        textDirection: widget.laTeXCode.textDirection,
-        locale: widget.laTeXCode.locale,
-        softWrap: widget.laTeXCode.softWrap,
-        overflow: widget.laTeXCode.overflow,
-        maxLines: widget.laTeXCode.maxLines,
-        semanticsLabel: widget.laTeXCode.semanticsLabel,
+    // Returning a RichText containing all the [TextSpan] and [WidgetSpan] created previously while
+    // obeying the specified style in widget.laTeXCode
+    return Text.rich(
+      TextSpan(
+        children: textBlocks,
+        style:
+            (defaultTextStyle == null) ? Theme.of(context).textTheme.bodyLarge : defaultTextStyle,
       ),
+      textAlign: widget.laTeXCode.textAlign,
+      textDirection: widget.laTeXCode.textDirection,
+      locale: widget.laTeXCode.locale,
+      softWrap: widget.laTeXCode.softWrap,
+      overflow: widget.laTeXCode.overflow,
+      maxLines: widget.laTeXCode.maxLines,
+      semanticsLabel: widget.laTeXCode.semanticsLabel,
     );
   }
 
