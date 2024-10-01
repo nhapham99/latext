@@ -57,13 +57,13 @@ class LaTexTState extends State<LaTexT> {
     // If no single Math part found, returning the raw [Text] from widget.laTeXCode
     if (matches.isEmpty) return widget.laTeXCode;
 
-    // Otherwise looping threw all matches and building a [RichText] from [TextSpan] and [WidgetSpan] widgets
+    // Otherwise looping through all matches and building a [RichText] from [TextSpan] and [WidgetSpan] widgets
     final List<InlineSpan> textBlocks = [];
     int lastTextEnd = 0;
 
     String? prevText1;
     for (final laTeXMatch in matches) {
-      // If there is an offset between the lat match (beginning of the [String] in first case), first adding the found [Text]
+      // If there is an offset between the last match (beginning of the [String] in first case), first adding the found [Text]
       if (laTeXMatch.start > lastTextEnd) {
         final texts = laTeXCode.substring(lastTextEnd, laTeXMatch.start);
         if (prevText1 != null && prevText1.endsWith(' ')) {
@@ -89,28 +89,12 @@ class LaTexTState extends State<LaTexT> {
       }
       // Adding the [CaTeX] widget to the children
       if (laTeXMatch.group(3) != null) {
-        if (matches.length > 1) {
-          textBlocks.addAll([
-            const TextSpan(
-              text: ' ',
-            ),
-            ..._extractWidgetSpans(
-              laTeXMatch.group(3)?.trim() ?? '',
-              false,
-            ),
-            const TextSpan(
-              text: ' ',
-            ),
-          ]);
-        } else {
-          textBlocks.addAll([
-            ..._extractWidgetSpans(
-              laTeXMatch.group(3)?.trim() ?? '',
-              false,
-              isScroll: true,
-            ),
-          ]);
-        }
+        textBlocks.addAll([
+          ..._extractWidgetSpans(
+            laTeXMatch.group(3)?.trim() ?? '',
+            false,
+          ),
+        ]);
       } else {
         textBlocks.addAll([
           const TextSpan(text: '\n'),
@@ -123,28 +107,30 @@ class LaTexTState extends State<LaTexT> {
 
     // If there is any text left after the end of the last match, adding it to children
     if (lastTextEnd < laTeXCode.length) {
-      textBlocks.addAll(
-        _extractTextSpans(
+      textBlocks.addAll([
+        const TextSpan(text: ' '),
+        ..._extractTextSpans(
           laTeXCode.substring(lastTextEnd),
         ),
-      );
+      ]);
     }
 
-    // Returning a RichText containing all the [TextSpan] and [WidgetSpan] created previously while
-    // obeying the specified style in widget.laTeXCode
-    return Text.rich(
-      TextSpan(
-        children: textBlocks,
-        style:
-            (defaultTextStyle == null) ? Theme.of(context).textTheme.bodyLarge : defaultTextStyle,
+    // Wrapping the RichText in a SingleChildScrollView for scrollable content
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Text.rich(
+        TextSpan(
+          children: textBlocks,
+          style: defaultTextStyle ?? Theme.of(context).textTheme.bodyLarge,
+        ),
+        textAlign: widget.laTeXCode.textAlign,
+        textDirection: widget.laTeXCode.textDirection,
+        locale: widget.laTeXCode.locale,
+        softWrap: widget.laTeXCode.softWrap,
+        overflow: widget.laTeXCode.overflow,
+        maxLines: widget.laTeXCode.maxLines,
+        semanticsLabel: widget.laTeXCode.semanticsLabel,
       ),
-      textAlign: widget.laTeXCode.textAlign,
-      textDirection: widget.laTeXCode.textDirection,
-      locale: widget.laTeXCode.locale,
-      softWrap: widget.laTeXCode.softWrap,
-      overflow: widget.laTeXCode.overflow,
-      maxLines: widget.laTeXCode.maxLines,
-      semanticsLabel: widget.laTeXCode.semanticsLabel,
     );
   }
 
@@ -179,7 +165,7 @@ class LaTexTState extends State<LaTexT> {
     return textSpans;
   }
 
-  List<InlineSpan> _extractWidgetSpans(String text, bool align, {bool isScroll = false}) {
+  List<InlineSpan> _extractWidgetSpans(String text, bool align) {
     final texts = text.split(widget.breakDelimiter);
     final List<InlineSpan> widgetSpans = [];
     for (int i = 0; i < texts.length; i++) {
@@ -201,28 +187,14 @@ class LaTexTState extends State<LaTexT> {
             ),
           );
         }
-        late Widget mathTex;
 
-        if (isScroll) {
-          mathTex = SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Math.tex(
-              subTexts[j].trim(),
-              textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-              onErrorFallback: (exception) =>
-                  widget.onErrorFallback?.call(subTexts[j].trim()) ??
-                  Math.defaultOnErrorFallback(exception),
-            ),
-          );
-        } else {
-          mathTex = Math.tex(
-            subTexts[j].trim(),
-            textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-            onErrorFallback: (exception) =>
-                widget.onErrorFallback?.call(subTexts[j].trim()) ??
-                Math.defaultOnErrorFallback(exception),
-          );
-        }
+        Widget mathTex = Math.tex(
+          subTexts[j].trim(),
+          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+          onErrorFallback: (exception) =>
+              widget.onErrorFallback?.call(subTexts[j].trim()) ??
+              Math.defaultOnErrorFallback(exception),
+        );
 
         if (align) {
           mathTex = Align(
