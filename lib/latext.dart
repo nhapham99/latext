@@ -89,12 +89,28 @@ class LaTexTState extends State<LaTexT> {
       }
       // Adding the [CaTeX] widget to the children
       if (laTeXMatch.group(3) != null) {
-        textBlocks.addAll([
-          ..._extractWidgetSpans(
-            laTeXMatch.group(3)?.trim() ?? '',
-            false,
-          ),
-        ]);
+        if (matches.length > 1) {
+          textBlocks.addAll([
+            const TextSpan(
+              text: ' ',
+            ),
+            ..._extractWidgetSpans(
+              laTeXMatch.group(3)?.trim() ?? '',
+              false,
+            ),
+            const TextSpan(
+              text: ' ',
+            ),
+          ]);
+        } else {
+          textBlocks.addAll([
+            ..._extractWidgetSpans(
+              laTeXMatch.group(3)?.trim() ?? '',
+              false,
+              isScroll: true,
+            ),
+          ]);
+        }
       } else {
         textBlocks.addAll([
           const TextSpan(text: '\n'),
@@ -163,7 +179,7 @@ class LaTexTState extends State<LaTexT> {
     return textSpans;
   }
 
-  List<InlineSpan> _extractWidgetSpans(String text, bool align) {
+  List<InlineSpan> _extractWidgetSpans(String text, bool align, {bool isScroll = false}) {
     final texts = text.split(widget.breakDelimiter);
     final List<InlineSpan> widgetSpans = [];
     for (int i = 0; i < texts.length; i++) {
@@ -185,14 +201,28 @@ class LaTexTState extends State<LaTexT> {
             ),
           );
         }
+        late Widget mathTex;
 
-        Widget mathTex = Math.tex(
-          subTexts[j].trim(),
-          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-          onErrorFallback: (exception) =>
-              widget.onErrorFallback?.call(subTexts[j].trim()) ??
-              Math.defaultOnErrorFallback(exception),
-        );
+        if (isScroll) {
+          mathTex = SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Math.tex(
+              subTexts[j].trim(),
+              textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+              onErrorFallback: (exception) =>
+                  widget.onErrorFallback?.call(subTexts[j].trim()) ??
+                  Math.defaultOnErrorFallback(exception),
+            ),
+          );
+        } else {
+          mathTex = Math.tex(
+            subTexts[j].trim(),
+            textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+            onErrorFallback: (exception) =>
+                widget.onErrorFallback?.call(subTexts[j].trim()) ??
+                Math.defaultOnErrorFallback(exception),
+          );
+        }
 
         if (align) {
           mathTex = Align(
