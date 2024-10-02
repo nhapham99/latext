@@ -78,13 +78,11 @@ class LaTexTState extends State<LaTexT> {
             texts,
           ),
         );
-        if (texts.endsWith(' ')) {
-          textBlocks.add(
-            const TextSpan(
-              text: ' ',
-            ),
-          );
-        }
+        textBlocks.add(
+          const TextSpan(
+            text: ' ',
+          ),
+        );
         prevText1 = texts;
       }
       // Adding the [CaTeX] widget to the children
