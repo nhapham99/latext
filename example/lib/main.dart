@@ -29,15 +29,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text: r'What do you think about $L'
-        '\''
-        r' = {L}{\sqrt{1-\frac{v^2}{c^2}}}$ ?'
-        r'\n'
-        r'And some display $\LaTeX$: $$\boxed{\rm{A function: } f(x) = \frac{5}{3} \cdot x}$$'
-        r'\n'
-        r'$\KaTeX$-Flutter provides easy processing of $LaTeX$ embedded into any text.'
-        r'\n'
-        r'$$\left\{\begin{array}{l}3 x-4 y=1 \\ -3 x+7 y=5\end{array}\right.$$',
+    text:
+        r'Cho đường tròn$$(O; R).$$Từ một điểm$$M$$ở bên ngoài$$(O),$$vẽ hai tiếp tuyến$$ME, MF \; (E, F$$là các tiếp điểm) sao cho$$\widehat{EMO} = 30^{\circ}.$$Biết chu vi tam giác$$MEF$$là 27 cm, tính bán kính$$R.$$',
   );
   late String _laTeX;
 
@@ -64,14 +57,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   maxLines: null,
                   decoration: const InputDecoration(
                       labelText: 'Your LaTeX code here',
-                      helperText: 'Use \$ as delimiter. Use \$\$ for display LaTeX.'),
+                      helperText:
+                          'Use \$ as delimiter. Use \$\$ for display LaTeX.'),
                   controller: _laTeXInputController,
                 ),
               ),
               Builder(
                 builder: (context) => LaTexT(
                   delimiter: r'$$',
-                  breakDelimiter: r'$',
+                  breakDelimiter: r'\n',
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(

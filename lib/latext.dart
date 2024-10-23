@@ -48,11 +48,13 @@ class LaTexTState extends State<LaTexT> {
 
     // Building [RegExp] to find any Math part of the LaTeX code by looking for the specified delimiters
     final String delimiter = widget.delimiter.replaceAll(r'$', r'\$');
-    final String displayDelimiter = widget.displayDelimiter.replaceAll(r'$', r'\$');
+    final String displayDelimiter =
+        widget.displayDelimiter.replaceAll(r'$', r'\$');
 
     final String rawRegExp =
         '(($delimiter)([^$delimiter]*[^\\\\\\$delimiter])($delimiter)|($displayDelimiter)([^$displayDelimiter]*[^\\\\\\$displayDelimiter])($displayDelimiter))';
-    List<RegExpMatch> matches = RegExp(rawRegExp, dotAll: true).allMatches(laTeXCode).toList();
+    List<RegExpMatch> matches =
+        RegExp(rawRegExp, dotAll: true).allMatches(laTeXCode).toList();
 
     // If no single Math part found, returning the raw [Text] from widget.laTeXCode
     if (matches.isEmpty) return widget.laTeXCode;
@@ -61,29 +63,22 @@ class LaTexTState extends State<LaTexT> {
     final List<InlineSpan> textBlocks = [];
     int lastTextEnd = 0;
 
-    String? prevText1;
     for (final laTeXMatch in matches) {
       // If there is an offset between the lat match (beginning of the [String] in first case), first adding the found [Text]
       if (laTeXMatch.start > lastTextEnd) {
         final texts = laTeXCode.substring(lastTextEnd, laTeXMatch.start);
-        if (prevText1 != null && prevText1.endsWith(' ')) {
-          textBlocks.add(
-            const TextSpan(
-              text: ' ',
-            ),
-          );
-        }
+
         textBlocks.addAll(
           _extractTextSpans(
             texts,
           ),
         );
+
         textBlocks.add(
           const TextSpan(
             text: ' ',
           ),
         );
-        prevText1 = texts;
       }
       // Adding the [CaTeX] widget to the children
       if (laTeXMatch.group(3) != null) {
@@ -106,7 +101,6 @@ class LaTexTState extends State<LaTexT> {
     // If there is any text left after the end of the last match, adding it to children
     if (lastTextEnd < laTeXCode.length) {
       textBlocks.addAll([
-        const TextSpan(text: ' '),
         ..._extractTextSpans(
           laTeXCode.substring(lastTextEnd),
         ),
@@ -118,8 +112,9 @@ class LaTexTState extends State<LaTexT> {
     return Text.rich(
       TextSpan(
         children: textBlocks,
-        style:
-            (defaultTextStyle == null) ? Theme.of(context).textTheme.bodyLarge : defaultTextStyle,
+        style: (defaultTextStyle == null)
+            ? Theme.of(context).textTheme.bodyLarge
+            : defaultTextStyle,
       ),
       textAlign: widget.laTeXCode.textAlign,
       textDirection: widget.laTeXCode.textDirection,
@@ -145,13 +140,6 @@ class LaTexTState extends State<LaTexT> {
 
       final subTexts = texts[i].split('${widget.breakDelimiter} ');
       for (int j = 0; j < subTexts.length; j++) {
-        if (j != 0) {
-          textSpans.add(
-            const TextSpan(
-              text: ' ',
-            ),
-          );
-        }
         textSpans.add(
           TextSpan(
             text: subTexts[j].trim(),
@@ -185,11 +173,13 @@ class LaTexTState extends State<LaTexT> {
           );
         }
 
+        final trimmedText = subTexts[j].trim();
+
         Widget mathTex = Math.tex(
-          subTexts[j].trim(),
+          trimmedText,
           textStyle: widget.equationStyle ?? widget.laTeXCode.style,
           onErrorFallback: (exception) =>
-              widget.onErrorFallback?.call(subTexts[j].trim()) ??
+              widget.onErrorFallback?.call(trimmedText) ??
               Math.defaultOnErrorFallback(exception),
         );
 
@@ -207,6 +197,15 @@ class LaTexTState extends State<LaTexT> {
             child: mathTex,
           ),
         );
+
+        // Check if there is no space after the LaTeX block and add one if necessary
+        if (j == subTexts.length - 1 && !subTexts[j].endsWith(' ')) {
+          widgetSpans.add(
+            const TextSpan(
+              text: ' ',
+            ),
+          );
+        }
       }
     }
 
