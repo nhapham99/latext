@@ -165,7 +165,7 @@ class LaTexTState extends State<LaTexT> {
     for (String part in texts) {
       if ((buffer + part).length > widget.maxLength) {
         widgetSpans.add(_createMathSpan(buffer.trim(), align));
-        widgetSpans.add(const TextSpan(text: ''));
+        widgetSpans.add(const TextSpan(text: ' '));
         buffer = part;
       } else {
         buffer += part;
