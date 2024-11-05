@@ -74,11 +74,13 @@ class LaTexTState extends State<LaTexT> {
           ),
         );
 
-        textBlocks.add(
-          const TextSpan(
-            text: ' ',
-          ),
-        );
+        if ((textBlocks.last as TextSpan).text?.trim() != '') {
+          textBlocks.add(
+            const TextSpan(
+              text: ' ',
+            ),
+          );
+        }
       }
       // Adding the [CaTeX] widget to the children
       if (laTeXMatch.group(3) != null) {
@@ -156,11 +158,11 @@ class LaTexTState extends State<LaTexT> {
 
     final List<InlineSpan> widgetSpans = [];
     String buffer = '';
-    const maxLength = 17;
+    const maxLength = 50;
 
     for (String part in texts) {
       if ((buffer + part).length > maxLength) {
-        widgetSpans.add(_createMathSpan(buffer, align));
+        widgetSpans.add(_createMathSpan(buffer.trim(), align));
         widgetSpans.add(const TextSpan(text: ''));
         buffer = part;
       } else {
@@ -170,7 +172,7 @@ class LaTexTState extends State<LaTexT> {
 
     // Add any remaining text
     if (buffer.isNotEmpty) {
-      widgetSpans.add(_createMathSpan(buffer, align));
+      widgetSpans.add(_createMathSpan(buffer.trim(), align));
     }
 
     return widgetSpans;
