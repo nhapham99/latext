@@ -151,64 +151,62 @@ class LaTexTState extends State<LaTexT> {
   }
 
   List<InlineSpan> _extractWidgetSpans(String text, bool align) {
-    final texts = text.split(widget.breakDelimiter);
+    // Use regex to split after common operators or delimiters to keep expressions valid
+    final texts = text.split(RegExp(r'(?<=\+|\-|\*|\/|,|\s|\(|\))'));
+
     final List<InlineSpan> widgetSpans = [];
-    for (int i = 0; i < texts.length; i++) {
-      if (i != 0) {
-        widgetSpans.add(
-          const TextSpan(
-            text: '\n',
-          ),
-        );
-      }
+    String buffer = '';
+    const maxLength = 17;
 
-      final subTexts = texts[i].split('${widget.breakDelimiter} ');
-
-      for (int j = 0; j < subTexts.length; j++) {
-        if (j != 0) {
-          widgetSpans.add(
-            const TextSpan(
-              text: ' ',
-            ),
-          );
-        }
-
-        final trimmedText = subTexts[j].trim();
-
-        Widget mathTex = Math.tex(
-          trimmedText,
-          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-          onErrorFallback: (exception) =>
-              widget.onErrorFallback?.call(trimmedText) ??
-              Math.defaultOnErrorFallback(exception),
-        );
-
-        if (align) {
-          mathTex = Align(
-            alignment: Alignment.center,
-            child: mathTex,
-          );
-        }
-
-        widgetSpans.add(
-          WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: mathTex,
-          ),
-        );
-
-        // Check if there is no space after the LaTeX block and add one if necessary
-        if (j == subTexts.length - 1 && !subTexts[j].endsWith(' ')) {
-          widgetSpans.add(
-            const TextSpan(
-              text: ' ',
-            ),
-          );
-        }
+    for (String part in texts) {
+      if ((buffer + part).length > maxLength) {
+        widgetSpans.add(_createMathSpan(buffer, align));
+        widgetSpans.add(const TextSpan(text: ''));
+        buffer = part;
+      } else {
+        buffer += part;
       }
     }
 
+    // Add any remaining text
+    if (buffer.isNotEmpty) {
+      widgetSpans.add(_createMathSpan(buffer, align));
+    }
+
     return widgetSpans;
+  }
+
+  InlineSpan _createMathSpan(String text, bool align) {
+    Widget mathTex = Math.tex(
+      text,
+      textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+      onErrorFallback: (exception) =>
+          widget.onErrorFallback?.call(text) ??
+          Math.defaultOnErrorFallback(exception),
+    );
+
+    if (align) {
+      mathTex = Align(
+        alignment: Alignment.center,
+        child: mathTex,
+      );
+    }
+
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          mathTex,
+          Text(
+            ' ',
+            style: widget.laTeXCode.style,
+          )
+        ],
+      ),
+    );
   }
 }
