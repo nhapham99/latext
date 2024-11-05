@@ -25,6 +25,8 @@ class LaTexT extends StatefulWidget {
   /// A callback function to be called when an error occurs while rendering the LaTeX code.
   final Function(String text)? onErrorFallback;
 
+  final int maxLength;
+
   const LaTexT({
     super.key,
     required this.laTeXCode,
@@ -33,6 +35,7 @@ class LaTexT extends StatefulWidget {
     this.delimiter = r'$$',
     this.displayDelimiter = r'$',
     this.breakDelimiter = r'\n',
+    this.maxLength = 17,
   });
 
   @override
@@ -158,10 +161,9 @@ class LaTexTState extends State<LaTexT> {
 
     final List<InlineSpan> widgetSpans = [];
     String buffer = '';
-    const maxLength = 50;
 
     for (String part in texts) {
-      if ((buffer + part).length > maxLength) {
+      if ((buffer + part).length > widget.maxLength) {
         widgetSpans.add(_createMathSpan(buffer.trim(), align));
         widgetSpans.add(const TextSpan(text: ''));
         buffer = part;
