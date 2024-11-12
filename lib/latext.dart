@@ -150,6 +150,24 @@ class LaTexTState extends State<LaTexT> {
     return textSpans;
   }
 
+  double _mathTexAlign(String text) {
+    double fontSize =
+        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
+    if (text.contains(RegExp(r'[()]'))) {
+      return fontSize / 8;
+    }
+
+    if (text.contains('widehat')) {
+      return -fontSize / 10;
+    }
+
+    if (RegExp(r'\b(cos|tan|log)\b').hasMatch(text)) {
+      return fontSize / 8;
+    }
+
+    return 0.0;
+  }
+
   List<InlineSpan> _extractWidgetSpans(String text, bool align) {
     final texts = text.split(widget.breakDelimiter);
     final List<InlineSpan> widgetSpans = [];
@@ -183,18 +201,34 @@ class LaTexTState extends State<LaTexT> {
               Math.defaultOnErrorFallback(exception),
         );
 
-        if (align) {
-          mathTex = Align(
-            alignment: Alignment.center,
-            child: mathTex,
-          );
-        }
+        Widget mathTexShadow = Math.tex(
+          trimmedText,
+          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+          onErrorFallback: (exception) =>
+              widget.onErrorFallback?.call(trimmedText) ??
+              Math.defaultOnErrorFallback(exception),
+        );
 
         widgetSpans.add(
           WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: mathTex,
+            alignment: PlaceholderAlignment.middle,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    top: _mathTexAlign(trimmedText),
+                    child: mathTex,
+                  ),
+                  Opacity(
+                    opacity: 0.0,
+                    child: mathTexShadow,
+                  ),
+                ],
+              ),
+            ),
           ),
         );
 
