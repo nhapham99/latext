@@ -168,6 +168,15 @@ class LaTexTState extends State<LaTexT> {
     return 0.0;
   }
 
+  double _mathPadding(String text) {
+    double fontSize =
+        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
+    if (text.contains('frac')) {
+      return fontSize / 2;
+    }
+    return 0.0;
+  }
+
   List<InlineSpan> _extractWidgetSpans(String text, bool align) {
     final texts = text.split(widget.breakDelimiter);
     final List<InlineSpan> widgetSpans = [];
@@ -212,21 +221,24 @@ class LaTexTState extends State<LaTexT> {
         widgetSpans.add(
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    top: _mathTexAlign(trimmedText),
-                    child: mathTex,
-                  ),
-                  Opacity(
-                    opacity: 0.0,
-                    child: mathTexShadow,
-                  ),
-                ],
+            child: Padding(
+              padding: EdgeInsets.only(top: _mathPadding(trimmedText)),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    Positioned(
+                      top: _mathTexAlign(trimmedText),
+                      child: mathTex,
+                    ),
+                    Opacity(
+                      opacity: 0.0,
+                      child: mathTexShadow,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
