@@ -29,8 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text:
-        r'Cho đường tròn$$(O; R).$$Từ một điểm$$M$$ở bên ngoài$$(O),$$vẽ hai tiếp tuyến$$ME, MF \; (E, F$$là các tiếp điểm) sao cho$$\widehat{EMO} = 30^{\circ}.$$Biết chu vi tam giác$$MEF$$là 27 cm, tính bán kính$$R.$$',
+    text: r'Tính diện tích phần tô màu bằng cách nhân $$0,72$$ với $$1/4.$$$$',
   );
   late String _laTeX;
 
