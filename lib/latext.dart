@@ -185,6 +185,10 @@ class LaTexTState extends State<LaTexT> {
       return fontSize / 15;
     }
 
+    if (RegExp(r'\d+').hasMatch(text)) {
+      return fontSize / 40;
+    }
+
     return 0.0;
   }
 
