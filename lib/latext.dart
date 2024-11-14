@@ -166,11 +166,11 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\d+,\d+').hasMatch(text)) {
-      return fontSize / 9;
+      return fontSize / 8;
     }
 
     if (RegExp(r'\d+{,}\d+').hasMatch(text)) {
-      return fontSize / 15;
+      return fontSize / 8;
     }
 
     if (RegExp(r'\d+/\d+').hasMatch(text)) {

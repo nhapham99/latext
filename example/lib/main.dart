@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 40.0,
                     ),
                   ),
                 ),
