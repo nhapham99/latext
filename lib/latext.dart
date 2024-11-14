@@ -165,12 +165,20 @@ class LaTexTState extends State<LaTexT> {
       return fontSize / 8;
     }
 
-    if (RegExp(r'^-?\d+(\,\d+)?').hasMatch(text)) {
-      return 0.0;
+    if (RegExp(r'\d+,\d+').hasMatch(text)) {
+      return fontSize / 9;
     }
 
-    if (RegExp(r'^-?\d+(\.\d+)?').hasMatch(text)) {
-      return fontSize / 16;
+    if (RegExp(r'\d+{,}\d+').hasMatch(text)) {
+      return fontSize / 15;
+    }
+
+    if (RegExp(r'\d+/\d+').hasMatch(text)) {
+      return fontSize / 10;
+    }
+
+    if (RegExp(r'\d+\s*[+-]\s*\d+[a-zA-Z]*').hasMatch(text)) {
+      return fontSize / 15;
     }
 
     return 0.0;
@@ -179,7 +187,7 @@ class LaTexTState extends State<LaTexT> {
   double _mathPadding(String text) {
     double fontSize =
         (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
-    if (text.contains('frac')) {
+    if (RegExp(r'\frac{\d+}{\d+}').hasMatch(text)) {
       return fontSize / 2;
     }
     return 0.0;
