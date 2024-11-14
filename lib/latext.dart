@@ -170,7 +170,7 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\d+\s*{,}?\s*\d+').hasMatch(text)) {
-      return fontSize / 9;
+      return fontSize / 7.5;
     }
 
     if (RegExp(r'\d+/\d+').hasMatch(text)) {
