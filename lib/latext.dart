@@ -181,6 +181,14 @@ class LaTexTState extends State<LaTexT> {
       return -fontSize / 10;
     }
 
+    if (RegExp(r'sqrt{\d+}').hasMatch(text)) {
+      return -fontSize / 15;
+    }
+
+    if (RegExp(r'\pm').hasMatch(text)) {
+      return fontSize / 12;
+    }
+
     if (RegExp(r'\d+\s*[+-]\s*\d+[a-zA-Z]*').hasMatch(text)) {
       return fontSize / 15;
     }
