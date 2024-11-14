@@ -185,8 +185,8 @@ class LaTexTState extends State<LaTexT> {
       return -fontSize / 15;
     }
 
-    if (RegExp(r'\sqrt{[a-zA-Z]}').hasMatch(text)) {
-      return 0.0;
+    if (RegExp(r'\\sqrt\{\\frac\{\d+\}\{\d+\}\}').hasMatch(text)) {
+      return -fontSize / 10;
     }
 
     if (RegExp(r'\pm').hasMatch(text)) {
