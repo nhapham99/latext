@@ -3,6 +3,24 @@ library latext;
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
+extension StringExt on String {
+  String refactorRac() {
+    final RegExp racRegex = RegExp(r'\brac\{(.+?)\}\{(.+?)\}');
+
+    return replaceAllMapped(racRegex, (match) {
+      return '\\frac{${match.group(1)}}{${match.group(2)}}';
+    });
+  }
+
+  String refactorExt() {
+    final RegExp extRegex = RegExp(r'\bext\{(.+?)\}');
+
+    return replaceAllMapped(extRegex, (match) {
+      return '\\text{${match.group(1)}}';
+    });
+  }
+}
+
 class LaTexT extends StatefulWidget {
   /// a Text used for the rendered code as well as for the style
   final Text laTeXCode;
@@ -201,6 +219,10 @@ class LaTexTState extends State<LaTexT> {
       return fontSize / 40;
     }
 
+    if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
+      return fontSize / 20;
+    }
+
     return 0.0;
   }
 
@@ -214,6 +236,7 @@ class LaTexTState extends State<LaTexT> {
   }
 
   List<InlineSpan> _extractWidgetSpans(String text, bool align) {
+    text = text.replaceAll('\f', '').refactorExt().refactorRac();
     final texts = text.split(widget.breakDelimiter);
     final List<InlineSpan> widgetSpans = [];
     for (int i = 0; i < texts.length; i++) {
