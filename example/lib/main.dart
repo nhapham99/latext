@@ -64,11 +64,12 @@ class _MyHomePageState extends State<MyHomePage> {
               Builder(
                 builder: (context) => LaTexT(
                   delimiter: r'$$',
-                  breakDelimiter: r'\n',
+                  breakDelimiter: r'\\n',
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(
-                      fontSize: 40.0,
+                      fontSize: 20.0,
+                      height: 1.7,
                     ),
                   ),
                 ),

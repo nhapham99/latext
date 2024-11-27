@@ -50,7 +50,7 @@ class LaTexT extends StatefulWidget {
     this.onErrorFallback,
     this.delimiter = r'$$',
     this.displayDelimiter = r'$',
-    this.breakDelimiter = r'\n',
+    this.breakDelimiter = r'\\n',
   });
 
   @override
@@ -145,6 +145,8 @@ class LaTexTState extends State<LaTexT> {
   }
 
   List<TextSpan> _extractTextSpans(String text) {
+    double fontSize =
+        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
     final texts = text.split(widget.breakDelimiter);
     final List<TextSpan> textSpans = [];
     for (int i = 0; i < texts.length; i++) {
@@ -160,7 +162,37 @@ class LaTexTState extends State<LaTexT> {
       for (int j = 0; j < subTexts.length; j++) {
         textSpans.add(
           TextSpan(
-            text: subTexts[j].trim(),
+            children: [
+              WidgetSpan(
+                alignment: PlaceholderAlignment.middle,
+                child: Padding(
+                  padding: EdgeInsets.only(top: fontSize / 2.8),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          // top: _mathTexAlign(trimmedText),
+                          child: Text(
+                            subTexts[j].trim(),
+                            style: widget.laTeXCode.style,
+                          ),
+                        ),
+                        Opacity(
+                          opacity: 0.0,
+                          child: Text(
+                            subTexts[j].trim(),
+                            style: widget.laTeXCode.style,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }
@@ -199,12 +231,16 @@ class LaTexTState extends State<LaTexT> {
       return -fontSize / 10;
     }
 
-    if (RegExp(r'sqrt{\d+}').hasMatch(text)) {
-      return -fontSize / 15;
-    }
-
     if (RegExp(r'\\sqrt\{\\frac\{\d+\}\{\d+\}\}').hasMatch(text)) {
       return -fontSize / 10;
+    }
+
+    if (RegExp(r'(\d+)?\\sqrt\{\d+\^\{\d+\}\.\d+\}').hasMatch(text)) {
+      return 0;
+    }
+
+    if (RegExp(r'sqrt{\d+}').hasMatch(text)) {
+      return -fontSize / 15;
     }
 
     if (RegExp(r'\pm').hasMatch(text)) {
