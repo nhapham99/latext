@@ -208,15 +208,15 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (text.contains('widehat')) {
-      return -fontSize / 10;
+      return fontSize / 11;
     }
 
     if (RegExp(r'\b(cos|tan|log)\b').hasMatch(text)) {
-      return fontSize / 8;
+      return fontSize / 5;
     }
 
     if (RegExp(r'\d+,\d+').hasMatch(text)) {
-      return fontSize / 9;
+      return fontSize / 3.5;
     }
 
     if (RegExp(r'\d+\s*{,}?\s*\d+').hasMatch(text)) {
@@ -224,11 +224,11 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\d+/\d+').hasMatch(text)) {
-      return fontSize / 10;
+      return fontSize / 4;
     }
 
     if (RegExp(r'[a-zA-Z]\^\d+').hasMatch(text)) {
-      return -fontSize / 10;
+      return fontSize / 10;
     }
 
     if (RegExp(r'\\sqrt\{\\frac\{\d+\}\{\d+\}\}').hasMatch(text)) {
@@ -244,7 +244,7 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\pm').hasMatch(text)) {
-      return fontSize / 12;
+      return fontSize / 4.6;
     }
 
     if (RegExp(r'\d+\s*[+-]\s*\d+[a-zA-Z]*').hasMatch(text)) {
@@ -252,11 +252,15 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\d+').hasMatch(text)) {
-      return fontSize / 40;
+      return fontSize / 30;
+    }
+
+    if (RegExp(r'\b([a-zA-Z](?:\s*,\s*[a-zA-Z])*)\b').hasMatch(text)) {
+      return fontSize / 2.6;
     }
 
     if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
-      return fontSize / 20;
+      return fontSize / 6;
     }
 
     return 0.0;
