@@ -272,6 +272,7 @@ class LaTexTState extends State<LaTexT> {
     if (RegExp(r'\frac{\d+}{\d+}').hasMatch(text)) {
       return fontSize / 2;
     }
+
     return 0.0;
   }
 
@@ -317,6 +318,9 @@ class LaTexTState extends State<LaTexT> {
               Math.defaultOnErrorFallback(exception),
         );
 
+        double fontSize =
+            (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
+
         widgetSpans.add(
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
@@ -324,6 +328,11 @@ class LaTexTState extends State<LaTexT> {
               padding: EdgeInsets.only(top: _mathPadding(trimmedText)),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(
+                  bottom: fontSize * 0.1,
+                ),
+                physics: const ClampingScrollPhysics(),
+                primary: true,
                 child: Stack(
                   clipBehavior: Clip.none,
                   alignment: Alignment.center,

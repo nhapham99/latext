@@ -29,7 +29,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text: r'Tính diện tích phần tô màu bằng cách nhân $$0,72$$ với $$1/4.$$$$',
+    text:
+        r"""T$$f(x) = f(0) + f'(0)x + \frac{f''(0)}{2!}x^2 + \frac{f'''(0)}{3!}x^3 + \ldots$$""",
   );
   late String _laTeX;
 
@@ -68,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(
-                      fontSize: 40.0,
+                      fontSize: 21,
                       height: 1.7,
                     ),
                   ),
