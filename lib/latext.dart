@@ -89,6 +89,7 @@ class LaTexTState extends State<LaTexT> {
         textBlocks.addAll(
           _extractTextSpans(
             texts,
+            textBlocks.length,
           ),
         );
 
@@ -121,6 +122,7 @@ class LaTexTState extends State<LaTexT> {
       textBlocks.addAll([
         ..._extractTextSpans(
           laTeXCode.substring(lastTextEnd),
+          textBlocks.length,
         ),
       ]);
     }
@@ -144,7 +146,7 @@ class LaTexTState extends State<LaTexT> {
     );
   }
 
-  List<TextSpan> _extractTextSpans(String text) {
+  List<TextSpan> _extractTextSpans(String text, int index) {
     double fontSize =
         (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
     final texts = text.split(widget.breakDelimiter);
@@ -160,7 +162,14 @@ class LaTexTState extends State<LaTexT> {
 
       final subTexts = texts[i].split('${widget.breakDelimiter} ');
       for (int j = 0; j < subTexts.length; j++) {
-        List<String> subSubTexts = subTexts[j].split(' ');
+        List<String> subSubTexts = subTexts[j].trim().split(' ');
+        if (index != 0) {
+          textSpans.add(
+            const TextSpan(
+              text: ' ',
+            ),
+          );
+        }
         for (int k = 0; k < subSubTexts.length; k++) {
           textSpans.add(
             TextSpan(
@@ -256,7 +265,7 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\b([a-zA-Z](?:\s*,\s*[a-zA-Z])*)\b').hasMatch(text)) {
-      return fontSize / 3.5;
+      return fontSize / 2.8;
     }
 
     if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
@@ -351,15 +360,6 @@ class LaTexTState extends State<LaTexT> {
             ),
           ),
         );
-
-        // Check if there is no space after the LaTeX block and add one if necessary
-        if (j == subTexts.length - 1 && !subTexts[j].endsWith(' ')) {
-          widgetSpans.add(
-            const TextSpan(
-              text: '',
-            ),
-          );
-        }
       }
     }
 
