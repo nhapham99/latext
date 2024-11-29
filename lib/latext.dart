@@ -94,7 +94,7 @@ class LaTexTState extends State<LaTexT> {
 
         textBlocks.add(
           const TextSpan(
-            text: ' ',
+            text: '',
           ),
         );
       }
@@ -160,38 +160,41 @@ class LaTexTState extends State<LaTexT> {
 
       final subTexts = texts[i].split('${widget.breakDelimiter} ');
       for (int j = 0; j < subTexts.length; j++) {
-        textSpans.add(
-          TextSpan(
-            children: [
-              WidgetSpan(
-                alignment: PlaceholderAlignment.middle,
-                child: Padding(
-                  padding: EdgeInsets.only(top: fontSize / 2.8),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                        // top: _mathTexAlign(trimmedText),
-                        child: Text(
-                          subTexts[j].trim(),
-                          style: widget.laTeXCode.style,
+        List<String> subSubTexts = subTexts[j].split(' ');
+        for (int k = 0; k < subSubTexts.length; k++) {
+          textSpans.add(
+            TextSpan(
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: fontSize / 2.8),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          // top: _mathTexAlign(trimmedText),
+                          child: Text(
+                            '${subSubTexts[k].trim()} ',
+                            style: widget.laTeXCode.style,
+                          ),
                         ),
-                      ),
-                      Opacity(
-                        opacity: 0.0,
-                        child: Text(
-                          subTexts[j].trim(),
-                          style: widget.laTeXCode.style,
+                        Opacity(
+                          opacity: 0.0,
+                          child: Text(
+                            '${subSubTexts[k].trim()} ',
+                            style: widget.laTeXCode.style,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
+              ],
+            ),
+          );
+        }
       }
     }
     return textSpans;
@@ -253,7 +256,7 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\b([a-zA-Z](?:\s*,\s*[a-zA-Z])*)\b').hasMatch(text)) {
-      return fontSize / 3;
+      return fontSize / 3.5;
     }
 
     if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
@@ -292,7 +295,7 @@ class LaTexTState extends State<LaTexT> {
         if (j != 0) {
           widgetSpans.add(
             const TextSpan(
-              text: ' ',
+              text: '',
             ),
           );
         }
@@ -353,7 +356,7 @@ class LaTexTState extends State<LaTexT> {
         if (j == subTexts.length - 1 && !subTexts[j].endsWith(' ')) {
           widgetSpans.add(
             const TextSpan(
-              text: ' ',
+              text: '',
             ),
           );
         }

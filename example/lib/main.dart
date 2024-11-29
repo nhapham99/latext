@@ -66,10 +66,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context) => LaTexT(
                   delimiter: r'$$',
                   breakDelimiter: r'\\n',
+                  equationStyle: const TextStyle(
+                    fontSize: 28,
+                    height: 1.7,
+                  ),
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(
-                      fontSize: 21,
+                      fontSize: 28,
                       height: 1.7,
                     ),
                   ),
