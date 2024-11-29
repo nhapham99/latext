@@ -167,28 +167,25 @@ class LaTexTState extends State<LaTexT> {
                 alignment: PlaceholderAlignment.middle,
                 child: Padding(
                   padding: EdgeInsets.only(top: fontSize / 2.8),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned(
-                          // top: _mathTexAlign(trimmedText),
-                          child: Text(
-                            subTexts[j].trim(),
-                            style: widget.laTeXCode.style,
-                          ),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        // top: _mathTexAlign(trimmedText),
+                        child: Text(
+                          subTexts[j].trim(),
+                          style: widget.laTeXCode.style,
                         ),
-                        Opacity(
-                          opacity: 0.0,
-                          child: Text(
-                            subTexts[j].trim(),
-                            style: widget.laTeXCode.style,
-                          ),
+                      ),
+                      Opacity(
+                        opacity: 0.0,
+                        child: Text(
+                          subTexts[j].trim(),
+                          style: widget.laTeXCode.style,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -252,15 +249,15 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\d+').hasMatch(text)) {
-      return fontSize / 30;
+      return fontSize / 3.5;
     }
 
     if (RegExp(r'\b([a-zA-Z](?:\s*,\s*[a-zA-Z])*)\b').hasMatch(text)) {
-      return fontSize / 2.6;
+      return fontSize / 3;
     }
 
     if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
-      return fontSize / 6;
+      return fontSize / 5;
     }
 
     return 0.0;
