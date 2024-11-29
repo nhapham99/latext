@@ -212,6 +212,11 @@ class LaTexTState extends State<LaTexT> {
   double _mathTexAlign(String text) {
     double fontSize =
         (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
+
+    if (text.contains(RegExp(r'[(\^)]'))) {
+      return fontSize / 3;
+    }
+
     if (text.contains(RegExp(r'[()]'))) {
       return fontSize / 8;
     }
