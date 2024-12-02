@@ -67,13 +67,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   delimiter: r'$$',
                   breakDelimiter: r'\\n',
                   equationStyle: const TextStyle(
-                    fontSize: 30,
+                    fontSize: 20,
                     height: 1.7,
                   ),
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(
-                      fontSize: 30,
+                      fontSize: 20,
                       height: 1.7,
                     ),
                   ),

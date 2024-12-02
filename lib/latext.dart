@@ -163,7 +163,7 @@ class LaTexTState extends State<LaTexT> {
       final subTexts = texts[i].split('${widget.breakDelimiter} ');
       for (int j = 0; j < subTexts.length; j++) {
         List<String> subSubTexts = subTexts[j].trim().split(' ');
-        if (index != 0) {
+        if (index != 0 && !text.contains(r'\\n' + texts[i])) {
           textSpans.add(
             const TextSpan(
               text: ' ',
@@ -212,6 +212,14 @@ class LaTexTState extends State<LaTexT> {
   double _mathTexAlign(String text) {
     double fontSize =
         (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
+
+    if (RegExp(r'\in').hasMatch(text)) {
+      return fontSize * 0.255;
+    }
+
+    if (text.contains(r'\vdots')) {
+      return -fontSize * 0.16;
+    }
 
     if (text.contains(RegExp(r'[(\^)]'))) {
       return fontSize / 3;
