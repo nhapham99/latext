@@ -163,7 +163,7 @@ class LaTexTState extends State<LaTexT> {
       final subTexts = texts[i].split('${widget.breakDelimiter} ');
       for (int j = 0; j < subTexts.length; j++) {
         List<String> subSubTexts = subTexts[j].trim().split(' ');
-        if (index != 0) {
+        if (index != 0 && !text.contains(r'\\n' + texts[i])) {
           textSpans.add(
             const TextSpan(
               text: ' ',
@@ -213,16 +213,20 @@ class LaTexTState extends State<LaTexT> {
     double fontSize =
         (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
 
+    if (text.contains('widehat')) {
+      return fontSize * 0.15;
+    }
+
+    if (text.contains(r'\parallel')) {
+      return fontSize * 0.35;
+    }
+
     if (text.contains(RegExp(r'[(\^)]'))) {
       return fontSize / 3;
     }
 
     if (text.contains(RegExp(r'[()]'))) {
       return fontSize / 8;
-    }
-
-    if (text.contains('widehat')) {
-      return fontSize / 11;
     }
 
     if (RegExp(r'\b(cos|tan|log)\b').hasMatch(text)) {
