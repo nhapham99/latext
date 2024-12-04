@@ -163,7 +163,7 @@ class LaTexTState extends State<LaTexT> {
       final subTexts = texts[i].split('${widget.breakDelimiter} ');
       for (int j = 0; j < subTexts.length; j++) {
         List<String> subSubTexts = subTexts[j].trim().split(' ');
-        if (index != 0 && !text.contains(r'\\n' + texts[i])) {
+        if (index != 0) {
           textSpans.add(
             const TextSpan(
               text: ' ',
@@ -213,14 +213,6 @@ class LaTexTState extends State<LaTexT> {
     double fontSize =
         (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
 
-    if (RegExp(r'\in').hasMatch(text)) {
-      return fontSize * 0.255;
-    }
-
-    if (text.contains(r'\vdots')) {
-      return -fontSize * 0.16;
-    }
-
     if (text.contains(RegExp(r'[(\^)]'))) {
       return fontSize / 3;
     }
@@ -238,7 +230,7 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\d+,\d+').hasMatch(text)) {
-      return fontSize / 3.5;
+      return fontSize * 0.36;
     }
 
     if (RegExp(r'\d+\s*{,}?\s*\d+').hasMatch(text)) {
@@ -247,6 +239,10 @@ class LaTexTState extends State<LaTexT> {
 
     if (RegExp(r'\d+/\d+').hasMatch(text)) {
       return fontSize / 4;
+    }
+
+    if (RegExp(r'\d+').hasMatch(text)) {
+      return fontSize * 0.3;
     }
 
     if (RegExp(r'[a-zA-Z]\^\d+').hasMatch(text)) {
