@@ -213,6 +213,10 @@ class LaTexTState extends State<LaTexT> {
     double fontSize =
         (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
 
+    if (RegExp(r'lim').hasMatch(text)) {
+      return fontSize / 1.7;
+    }
+
     if (text.contains('widehat')) {
       return fontSize * 0.15;
     }
