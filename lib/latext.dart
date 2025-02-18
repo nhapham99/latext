@@ -241,6 +241,10 @@ class LaTexTState extends State<LaTexT> {
       return fontSize * 0.36;
     }
 
+    if (RegExp(r'\\dfrac').hasMatch(text)) {
+      return 0;
+    }
+
     if (RegExp(r'\d+\s*{,}?\s*\d+').hasMatch(text)) {
       return fontSize / 7.5;
     }
