@@ -217,6 +217,10 @@ class LaTexTState extends State<LaTexT> {
       return fontSize / 1.7;
     }
 
+    if (RegExp(r'\\dfrac').hasMatch(text)) {
+      return fontSize * 0.25;
+    }
+
     if (text.contains('widehat')) {
       return fontSize * 0.15;
     }
@@ -239,10 +243,6 @@ class LaTexTState extends State<LaTexT> {
 
     if (RegExp(r'\d+,\d+').hasMatch(text)) {
       return fontSize * 0.36;
-    }
-
-    if (RegExp(r'\\dfrac').hasMatch(text)) {
-      return 0;
     }
 
     if (RegExp(r'\d+\s*{,}?\s*\d+').hasMatch(text)) {
