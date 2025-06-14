@@ -226,7 +226,7 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (text.contains(RegExp(r'[(\^)]'))) {
-      return fontSize / 3;
+      return fontSize / 5;
     }
 
     if (text.contains(RegExp(r'[()]'))) {

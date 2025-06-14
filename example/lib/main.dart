@@ -29,7 +29,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text: r"""$$12 216 - 8 507 + 4 189 = 3 709 + 4 189 = 7 898$$""",
+    text:
+        r""" Chuyển 1 sang vế trái: $$2x^2 + 2x - 1 = 0$$, Bước 2: Chia hai vế cho 2 để đơn giản hóa phương trình: $$x^2 + x - 0.5 = 0$$, Bước 3: Đây là phương trình bậc hai, tớ sẽ dùng công thức nghiệm: $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$""",
   );
   late String _laTeX;
 
