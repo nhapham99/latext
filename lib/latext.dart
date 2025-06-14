@@ -89,13 +89,6 @@ class LaTexTState extends State<LaTexT> {
         textBlocks.addAll(
           _extractTextSpans(
             texts,
-            textBlocks.length,
-          ),
-        );
-
-        textBlocks.add(
-          const TextSpan(
-            text: '',
           ),
         );
       }
@@ -104,13 +97,12 @@ class LaTexTState extends State<LaTexT> {
         textBlocks.addAll([
           ..._extractWidgetSpans(
             laTeXMatch.group(3)?.trim() ?? '',
-            false,
           ),
         ]);
       } else {
         textBlocks.addAll([
           const TextSpan(text: '\n'),
-          ..._extractWidgetSpans(laTeXMatch.group(6)?.trim() ?? '', true),
+          ..._extractWidgetSpans(laTeXMatch.group(6)?.trim() ?? ''),
           const TextSpan(text: '\n')
         ]);
       }
@@ -122,7 +114,6 @@ class LaTexTState extends State<LaTexT> {
       textBlocks.addAll([
         ..._extractTextSpans(
           laTeXCode.substring(lastTextEnd),
-          textBlocks.length,
         ),
       ]);
     }
@@ -146,166 +137,40 @@ class LaTexTState extends State<LaTexT> {
     );
   }
 
-  List<TextSpan> _extractTextSpans(String text, int index) {
-    double fontSize =
-        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
+  TextStyle? get _textSpecificStyle {
+    final originalStyle = widget.laTeXCode.style;
+    if (originalStyle == null || originalStyle.height == null) {
+      return originalStyle;
+    }
+    // For text-only lines, use null height to allow Flutter to use default line spacing,
+    // overriding a potentially large height meant for LaTeX lines.
+    return originalStyle.copyWith(height: null);
+  }
+
+  List<TextSpan> _extractTextSpans(String text) {
     final texts = text.split(widget.breakDelimiter);
     final List<TextSpan> textSpans = [];
     for (int i = 0; i < texts.length; i++) {
       if (i != 0) {
         textSpans.add(
-          const TextSpan(
-            text: '\n',
-          ),
+          TextSpan(text: '\n', style: _textSpecificStyle),
         );
       }
-
-      final subTexts = texts[i].split('${widget.breakDelimiter} ');
-      for (int j = 0; j < subTexts.length; j++) {
-        List<String> subSubTexts = subTexts[j].trim().split(' ');
-        if (index != 0 && !text.contains(r'\\n' + texts[i])) {
-          textSpans.add(
-            const TextSpan(
-              text: ' ',
-            ),
-          );
-        }
-        for (int k = 0; k < subSubTexts.length; k++) {
-          textSpans.add(
-            TextSpan(
-              children: [
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: fontSize / 2.8),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned(
-                          // top: _mathTexAlign(trimmedText),
-                          child: Text(
-                            '${subSubTexts[k].trim()} ',
-                            style: widget.laTeXCode.style,
-                          ),
-                        ),
-                        Opacity(
-                          opacity: 0.0,
-                          child: Text(
-                            '${subSubTexts[k].trim()} ',
-                            style: widget.laTeXCode.style,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
+      final currentSegment = texts[i];
+      if (currentSegment.isNotEmpty) {
+        textSpans.add(
+          TextSpan(text: currentSegment, style: _textSpecificStyle),
+        );
       }
     }
     return textSpans;
   }
 
-  double _mathTexAlign(String text) {
-    double fontSize =
-        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
-
-    if (RegExp(r'lim').hasMatch(text)) {
-      return fontSize / 1.7;
-    }
-
-    if (text.contains('widehat')) {
-      return fontSize * 0.15;
-    }
-
-    if (text.contains(r'\parallel')) {
-      return fontSize * 0.35;
-    }
-
-    if (text.contains(RegExp(r'[(\^)]'))) {
-      return fontSize / 3;
-    }
-
-    if (text.contains(RegExp(r'[()]'))) {
-      return fontSize / 8;
-    }
-
-    if (RegExp(r'\b(cos|tan|log)\b').hasMatch(text)) {
-      return fontSize / 5;
-    }
-
-    if (RegExp(r'\d+,\d+').hasMatch(text)) {
-      return fontSize * 0.36;
-    }
-
-    if (RegExp(r'\d+\s*{,}?\s*\d+').hasMatch(text)) {
-      return fontSize / 7.5;
-    }
-
-    if (RegExp(r'\d+/\d+').hasMatch(text)) {
-      return fontSize / 4;
-    }
-
-    if (RegExp(r'\d+').hasMatch(text)) {
-      return fontSize * 0.3;
-    }
-
-    if (RegExp(r'[a-zA-Z]\^\d+').hasMatch(text)) {
-      return fontSize / 10;
-    }
-
-    if (RegExp(r'\\sqrt\{\\frac\{\d+\}\{\d+\}\}').hasMatch(text)) {
-      return -fontSize / 10;
-    }
-
-    if (RegExp(r'(\d+)?\\sqrt\{\d+\^\{\d+\}\.\d+\}').hasMatch(text)) {
-      return 0;
-    }
-
-    if (RegExp(r'sqrt{\d+}').hasMatch(text)) {
-      return -fontSize / 15;
-    }
-
-    if (RegExp(r'\pm').hasMatch(text)) {
-      return fontSize / 4.6;
-    }
-
-    if (RegExp(r'\d+\s*[+-]\s*\d+[a-zA-Z]*').hasMatch(text)) {
-      return fontSize / 15;
-    }
-
-    if (RegExp(r'\d+').hasMatch(text)) {
-      return fontSize / 3.5;
-    }
-
-    if (RegExp(r'\b([a-zA-Z](?:\s*,\s*[a-zA-Z])*)\b').hasMatch(text)) {
-      return fontSize / 2.8;
-    }
-
-    if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
-      return fontSize / 5;
-    }
-
-    return 0.0;
-  }
-
-  double _mathPadding(String text) {
-    double fontSize =
-        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
-    if (RegExp(r'\frac{\d+}{\d+}').hasMatch(text)) {
-      return fontSize / 2;
-    }
-
-    return 0.0;
-  }
-
-  List<InlineSpan> _extractWidgetSpans(String text, bool align) {
+  List<InlineSpan> _extractWidgetSpans(String text) {
     text = text.replaceAll('\f', '').refactorExt().refactorRac();
     final texts = text.split(widget.breakDelimiter);
     final List<InlineSpan> widgetSpans = [];
+
     for (int i = 0; i < texts.length; i++) {
       if (i != 0) {
         widgetSpans.add(
@@ -315,69 +180,29 @@ class LaTexTState extends State<LaTexT> {
         );
       }
 
-      final subTexts = texts[i].split('${widget.breakDelimiter} ');
+      final trimmedText = texts[i].trim();
+      if (trimmedText.isEmpty) continue;
 
-      for (int j = 0; j < subTexts.length; j++) {
-        if (j != 0) {
-          widgetSpans.add(
-            const TextSpan(
-              text: '',
-            ),
-          );
-        }
+      final mathTex = Math.tex(
+        trimmedText,
+        textStyle: widget.equationStyle ?? widget.laTeXCode.style,
+        onErrorFallback: (exception) =>
+            widget.onErrorFallback?.call(trimmedText) ??
+            Math.defaultOnErrorFallback(exception),
+      );
 
-        final trimmedText = subTexts[j].trim();
-
-        Widget mathTex = Math.tex(
-          trimmedText,
-          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-          onErrorFallback: (exception) =>
-              widget.onErrorFallback?.call(trimmedText) ??
-              Math.defaultOnErrorFallback(exception),
-        );
-
-        Widget mathTexShadow = Math.tex(
-          trimmedText,
-          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-          onErrorFallback: (exception) =>
-              widget.onErrorFallback?.call(trimmedText) ??
-              Math.defaultOnErrorFallback(exception),
-        );
-
-        double fontSize =
-            (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
-
-        widgetSpans.add(
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Padding(
-              padding: EdgeInsets.only(top: _mathPadding(trimmedText)),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.only(
-                  bottom: fontSize * 0.1,
-                ),
-                physics: const ClampingScrollPhysics(),
-                primary: true,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      top: _mathTexAlign(trimmedText),
-                      child: mathTex,
-                    ),
-                    Opacity(
-                      opacity: 0.0,
-                      child: mathTexShadow,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+      widgetSpans.add(
+        WidgetSpan(
+          alignment: PlaceholderAlignment.baseline,
+          baseline: TextBaseline.alphabetic,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.zero,
+            physics: const ClampingScrollPhysics(),
+            child: mathTex,
           ),
-        );
-      }
+        ),
+      );
     }
 
     return widgetSpans;
