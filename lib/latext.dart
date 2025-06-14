@@ -249,10 +249,6 @@ class LaTexTState extends State<LaTexT> {
       return fontSize / 4;
     }
 
-    if (RegExp(r'\d+').hasMatch(text)) {
-      return fontSize * 0.3;
-    }
-
     if (RegExp(r'[a-zA-Z]\^\d+').hasMatch(text)) {
       return fontSize / 10;
     }

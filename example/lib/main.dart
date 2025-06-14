@@ -29,8 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text:
-        r"""T$$f(x) = f(0) + f'(0)x + \frac{f''(0)}{2!}x^2 + \frac{f'''(0)}{3!}x^3 + \ldots$$""",
+    text: r"""$$12 216 - 8 507 + 4 189 = 3 709 + 4 189 = 7 898$$""",
   );
   late String _laTeX;
 
