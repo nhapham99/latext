@@ -163,7 +163,9 @@ class LaTexTState extends State<LaTexT> {
       final subTexts = texts[i].split('${widget.breakDelimiter} ');
       for (int j = 0; j < subTexts.length; j++) {
         List<String> subSubTexts = subTexts[j].trim().split(' ');
-        if (index != 0 && !text.contains(r'\\n' + texts[i])) {
+        if (index != 0 &&
+            !text.contains(r'\\n' + texts[i]) &&
+            RegExp(r'^[a-zA-Z]').hasMatch(texts[i])) {
           textSpans.add(
             const TextSpan(
               text: ' ',
