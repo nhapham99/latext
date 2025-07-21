@@ -165,7 +165,7 @@ class LaTexTState extends State<LaTexT> {
         List<String> subSubTexts = subTexts[j].trim().split(' ');
         if (index != 0 &&
             !text.contains(r'\\n' + texts[i]) &&
-            RegExp(r'^[a-zA-Z]').hasMatch(texts[i])) {
+            RegExp(r'^[a-zA-Z]').hasMatch(text.trim())) {
           textSpans.add(
             const TextSpan(
               text: ' ',
@@ -226,7 +226,6 @@ class LaTexTState extends State<LaTexT> {
     if (text.contains(r'\parallel')) {
       return fontSize * 0.35;
     }
-
     if (text.contains(RegExp(r'[(\^)]'))) {
       return fontSize / 5;
     }
@@ -280,11 +279,11 @@ class LaTexTState extends State<LaTexT> {
     }
 
     if (RegExp(r'\b([a-zA-Z](?:\s*,\s*[a-zA-Z])*)\b').hasMatch(text)) {
-      return fontSize / 2.8;
+      return fontSize / 3.8;
     }
 
     if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
-      return fontSize / 5;
+      return fontSize / 4;
     }
 
     return 0.0;

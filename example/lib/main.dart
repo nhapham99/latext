@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
     text:
-        r""" Chuyển 1 sang vế trái: $$2x^2 + 2x - 1 = 0$$, Bước 2: Chia hai vế cho 2 để đơn giản hóa phương trình: $$x^2 + x - 0.5 = 0$$, Bước 3: Đây là phương trình bậc hai, tớ sẽ dùng công thức nghiệm: $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$""",
+        r"""What is the measure of angle $$P$$, given triangle $$MNP$$ is right-angled at $$M$$ and $$\widehat{N} = 2 \widehat{P}.$$?""",
   );
   late String _laTeX;
 
