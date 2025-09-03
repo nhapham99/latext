@@ -29,8 +29,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text:
-        r"""What is the measure of angle $$P$$, given triangle $$MNP$$ is right-angled at $$M$$ and $$\widehat{N} = 2 \widehat{P}.$$?""",
+    text: r"""$$-4{,}9 < 0; \ \dfrac{11}{3}> 0$$ nên$$ -4{,}9 <\dfrac{11}{3}.$$
+\\n\\n $$0 <\dfrac{11}{3}.$$
+\\n\\n $$2{,}58 < 3 <\dfrac{9}{3}<\dfrac{11}{3}.$$
+\\n\\n$$4\dfrac{1}{5}> 4;\dfrac{11}{3}<\dfrac{12}{3}= 4$$ nên$$4\dfrac{1}{5}>\dfrac{11}{3}.$$
+\\n\\nVậy trong các số đã cho, có các số $$-4{,}9; 0; 2{,}58$$ là nhỏ hơn$$\dfrac{11}{3}.$$""",
   );
   late String _laTeX;
 
@@ -47,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: const Text('LaTexT Flutter Home Page'),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 100.0),
           child: Column(
             children: <Widget>[
               Padding(
@@ -67,13 +70,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   delimiter: r'$$',
                   breakDelimiter: r'\\n',
                   equationStyle: const TextStyle(
-                    fontSize: 30,
+                    fontSize: 16,
                     height: 1.7,
                   ),
                   laTeXCode: Text(
                     _laTeX,
                     style: const TextStyle(
-                      fontSize: 30,
+                      fontSize: 16,
                       height: 1.7,
                     ),
                   ),
