@@ -255,6 +255,7 @@ class LaTexTState extends State<LaTexT> {
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.only(
                 bottom: fontSize * 0.1,
+                top: fontSize * 0.11,
               ),
               physics: const ClampingScrollPhysics(),
               primary: true,

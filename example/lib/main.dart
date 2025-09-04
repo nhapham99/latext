@@ -32,7 +32,14 @@ class _MyHomePageState extends State<MyHomePage> {
     text:
         r"""$$s^2 = \frac{1}{40}[ (20 - 22.1)^2 \cdot 5 + \dots + (24 - 22.1) + (1 + 2 + 3 + 4 + 5)$$\\nmot hai ba $$\frac{1}{40}$$
         \\n
-        Ta có:$$\displaystyle \int \limits_{0}\limits^{2}(x^2 + 2x - 3)dx =\left.(\frac{x^3}{3} + x^2 - 3x)\right|_{0}^{2} = \dfrac{2}{3}.$$
+        Ta có:$$\displaystyle \int \limits_{0}\limits^{2}(x^2 + 2x - 3)dx =\left.(\frac{x^3}{3} + x^2 - 3x)\right|_{0}^{2} = \dfrac{2}{3}.$$\\n
+        Sản lượng trung bình của 40 thửa ruộng là:\\n
+$$\overline{x}=\dfrac{20\cdot 5+21\cdot 8+22 \cdot11+23\cdot 10+24\cdot 6}{40}=22{,}1.$$\\n
+Phương sai của mẫu số liệu là:\\n
+$$s^2=\dfrac{1}{40} \left[(20-22{,}1)^2\cdot 5+...+(24-22{,}1)^2 \cdot 6 \right ]$$\\n\\n
+$$s^2=1{,}54.$$\\n
+Độ lệch chuẩn của mẫu số liệu là:\\n
+$$s=\sqrt{s^2}=\sqrt{1{,}54} \approx 1{,}24.$$
         """,
   );
   late String _laTeX;
