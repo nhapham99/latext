@@ -185,7 +185,7 @@ class LaTexTState extends State<LaTexT> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                          bottom: fontSize / 4,
+                          bottom: fontSize / 3,
                           child: Text(
                             '${subSubTexts[k].trim()} ',
                             style: widget.laTeXCode.style,
