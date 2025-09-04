@@ -185,7 +185,7 @@ class LaTexTState extends State<LaTexT> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                          // top: _mathTexAlign(trimmedText),
+                          bottom: fontSize / 4,
                           child: Text(
                             '${subSubTexts[k].trim()} ',
                             style: widget.laTeXCode.style,
@@ -209,94 +209,6 @@ class LaTexTState extends State<LaTexT> {
       }
     }
     return textSpans;
-  }
-
-  double _mathTexAlign(String text) {
-    double fontSize =
-        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
-
-    if (RegExp(r'lim').hasMatch(text)) {
-      return fontSize / 1.7;
-    }
-
-    if (text.contains('widehat')) {
-      return fontSize * 0.15;
-    }
-
-    if (text.contains(r'\parallel')) {
-      return fontSize * 0.35;
-    }
-    if (text.contains(RegExp(r'[(\^)]'))) {
-      return fontSize / 5;
-    }
-
-    if (text.contains(RegExp(r'[()]'))) {
-      return fontSize / 8;
-    }
-
-    if (RegExp(r'\b(cos|tan|log)\b').hasMatch(text)) {
-      return fontSize / 5;
-    }
-
-    if (RegExp(r'\d+,\d+').hasMatch(text)) {
-      return fontSize * 0.36;
-    }
-
-    if (RegExp(r'\d+\s*{,}?\s*\d+').hasMatch(text)) {
-      return fontSize / 3.0;
-    }
-
-    if (RegExp(r'\d+/\d+').hasMatch(text)) {
-      return fontSize / 4;
-    }
-
-    if (RegExp(r'[a-zA-Z]\^\d+').hasMatch(text)) {
-      return fontSize / 10;
-    }
-
-    if (RegExp(r'\\sqrt\{\\frac\{\d+\}\{\d+\}\}').hasMatch(text)) {
-      return -fontSize / 10;
-    }
-
-    if (RegExp(r'(\d+)?\\sqrt\{\d+\^\{\d+\}\.\d+\}').hasMatch(text)) {
-      return 0;
-    }
-
-    if (RegExp(r'sqrt{\d+}').hasMatch(text)) {
-      return -fontSize / 15;
-    }
-
-    if (RegExp(r'\pm').hasMatch(text)) {
-      return fontSize / 4.6;
-    }
-
-    if (RegExp(r'\d+\s*[+-]\s*\d+[a-zA-Z]*').hasMatch(text)) {
-      return fontSize / 15;
-    }
-
-    if (RegExp(r'\d+').hasMatch(text)) {
-      return fontSize / 3.5;
-    }
-
-    if (RegExp(r'\b([a-zA-Z](?:\s*,\s*[a-zA-Z])*)\b').hasMatch(text)) {
-      return fontSize / 3.8;
-    }
-
-    if (RegExp(r'[a-zA-Z]').hasMatch(text)) {
-      return fontSize / 4;
-    }
-
-    return 0.0;
-  }
-
-  double _mathPadding(String text) {
-    double fontSize =
-        (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
-    if (RegExp(r'\frac{\d+}{\d+}').hasMatch(text)) {
-      return fontSize / 2;
-    }
-
-    return 0.0;
   }
 
   List<InlineSpan> _extractWidgetSpans(String text, bool align) {
@@ -333,44 +245,20 @@ class LaTexTState extends State<LaTexT> {
               Math.defaultOnErrorFallback(exception),
         );
 
-        Widget mathTexShadow = Math.tex(
-          trimmedText,
-          textStyle: widget.equationStyle ?? widget.laTeXCode.style,
-          onErrorFallback: (exception) =>
-              widget.onErrorFallback?.call(trimmedText) ??
-              Math.defaultOnErrorFallback(exception),
-        );
-
         double fontSize =
             (widget.equationStyle ?? widget.laTeXCode.style)?.fontSize ?? 0;
 
         widgetSpans.add(
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: Padding(
-              padding: EdgeInsets.only(top: _mathPadding(trimmedText)),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.only(
-                  bottom: fontSize * 0.1,
-                ),
-                physics: const ClampingScrollPhysics(),
-                primary: true,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    Positioned(
-                      top: _mathTexAlign(trimmedText),
-                      child: mathTex,
-                    ),
-                    Opacity(
-                      opacity: 0.0,
-                      child: mathTexShadow,
-                    ),
-                  ],
-                ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.only(
+                bottom: fontSize * 0.1,
               ),
+              physics: const ClampingScrollPhysics(),
+              primary: true,
+              child: mathTex,
             ),
           ),
         );

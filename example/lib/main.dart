@@ -29,11 +29,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _laTeXInputController = TextEditingController(
-    text: r"""$$-4{,}9 < 0; \ \dfrac{11}{3}> 0$$ nên$$ -4{,}9 <\dfrac{11}{3}.$$
-\\n\\n $$0 <\dfrac{11}{3}.$$
-\\n\\n $$2{,}58 < 3 <\dfrac{9}{3}<\dfrac{11}{3}.$$
-\\n\\n$$4\dfrac{1}{5}> 4;\dfrac{11}{3}<\dfrac{12}{3}= 4$$ nên$$4\dfrac{1}{5}>\dfrac{11}{3}.$$
-\\n\\nVậy trong các số đã cho, có các số $$-4{,}9; 0; 2{,}58$$ là nhỏ hơn$$\dfrac{11}{3}.$$""",
+    text:
+        r"""$$s^2 = \frac{1}{40}[ (20 - 22.1)^2 \cdot 5 + \dots + (24 - 22.1) + (1 + 2 + 3 + 4 + 5)$$\\nmot hai ba $$\frac{1}{40}$$
+        \\n
+        Ta có:$$\displaystyle \int \limits_{0}\limits^{2}(x^2 + 2x - 3)dx =\left.(\frac{x^3}{3} + x^2 - 3x)\right|_{0}^{2} = \dfrac{2}{3}.$$
+        """,
   );
   late String _laTeX;
 
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     _laTeX,
                     style: const TextStyle(
                       fontSize: 16,
-                      height: 1.7,
+                      height: 1.2,
                     ),
                   ),
                 ),
